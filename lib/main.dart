@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+
+// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'account/login.dart';
@@ -9,7 +11,7 @@ import 'categories/categories.dart';
 import 'categories/category.dart';
 import 'foundation.dart';
 import 'home/home.dart';
-import 'nav/nav.dart';
+import 'shell.dart';
 import 'state_observer.dart';
 
 void main() {
@@ -22,60 +24,61 @@ class App extends StatelessWidget {
 
   static final _router = GoRouter(
       // debugLogDiagnostics: true,
-      urlPathStrategy: UrlPathStrategy.path,
       initialLocation: '/home',
       routes: [
-        GoRoute(
-            name: 'home',
-            path: '/:tab(home|cart|categories)',
-            pageBuilder: (context, state) {
-              int index;
-
-              switch (state.params['tab']!) {
-                case 'cart':
-                  index = 1;
-                  break;
-                case 'categories':
-                  index = 2;
-                  break;
-                case 'home':
-                default:
-                  index = 0;
-              }
-              return NoTransitionPage(
-                  child: IndexedStack(
-                index: index,
-                children: const [Home(), Cart(), Categories()],
-              ));
+        ShellRoute(
+            builder: (context, state, child) {
+              return Shell(key: state.pageKey, child: child);
             },
             routes: [
+            // https://github.com/flutter/flutter/issues/99124
               GoRoute(
-                  name: 'category',
-                  path: 'category/:id',
+                  name: 'home',
+                  path: '/:tab(home|cart|categories)',
                   pageBuilder: (context, state) {
-                    StringMap? data;
-                    if (state.extra != null) {
-                      data = state.extra as StringMap;
+                    int index;
+
+                    switch (state.params['tab']!) {
+                      case 'cart':
+                        index = 1;
+                        break;
+                      case 'categories':
+                        index = 2;
+                        break;
+                      case 'home':
+                      default:
+                        index = 0;
                     }
                     return NoTransitionPage(
-                      child: Category(
-                          key: state.pageKey,
-                          id: state.params['id']!,
-                          data: data),
-                    );
-                  })
-            ]),
-        GoRoute(
-            path: '/login',
-            pageBuilder: (context, state) {
-              return NoTransitionPage(child: Login(key: state.pageKey));
-            }),
-      ],
-      navigatorBuilder: (context, state, child) {
-        print(state.name);
-        // https://github.com/flutter/flutter/issues/110935
-        return Nav(key: state.pageKey, tab: 'home', child: child);
-      });
+                        child: IndexedStack(
+                      index: index,
+                      children: const [Home(), Cart(), Categories()],
+                    ));
+                  },
+                  routes: [
+                    GoRoute(
+                        name: 'category',
+                        path: 'category/:id',
+                        pageBuilder: (context, state) {
+                          StringMap? data;
+                          if (state.extra != null) {
+                            data = state.extra as StringMap;
+                          }
+                          return NoTransitionPage(
+                            child: Category(
+                                key: state.pageKey,
+                                id: state.params['id']!,
+                                data: data),
+                          );
+                        })
+                  ]),
+              GoRoute(
+                  path: '/login',
+                  pageBuilder: (context, state) {
+                    return NoTransitionPage(child: Login(key: state.pageKey));
+                  }),
+            ])
+      ]);
 
   @override
   Widget build(BuildContext context) {

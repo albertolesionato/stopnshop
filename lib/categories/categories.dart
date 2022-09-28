@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../foundation.dart';
 import '../widgets/future_builder_.dart';
 import 'category_card.dart';
 
-class Categories extends StatelessWidget {
-  const Categories({Key? key}) : super(key: key);
+class Categories extends GoRouteData {
+  const Categories();
 
   @override
   Widget build(BuildContext context) {
