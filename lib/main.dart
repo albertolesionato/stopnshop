@@ -15,6 +15,7 @@ import 'shell.dart';
 import 'state_observer.dart';
 
 void main() {
+  usePathUrlStrategy();
   Bloc.observer = StateObserver();
   runApp(const App());
 }
@@ -56,21 +57,22 @@ class App extends StatelessWidget {
                     ));
                   },
                   routes: [
-                    GoRoute(
-                        name: 'category',
-                        path: 'category/:id',
-                        pageBuilder: (context, state) {
-                          StringMap? data;
-                          if (state.extra != null) {
-                            data = state.extra as StringMap;
-                          }
-                          return NoTransitionPage(
-                            child: Category(
-                                key: state.pageKey,
-                                id: state.params['id']!,
-                                data: data),
-                          );
-                        })
+                    $category
+                    // GoRoute(
+                    //     name: 'category',
+                    //     path: 'category/:id',
+                    //     pageBuilder: (context, state) {
+                    //       StringMap? data;
+                    //       if (state.extra != null) {
+                    //         data = state.extra as StringMap;
+                    //       }
+                    //       return NoTransitionPage(
+                    //         child: Category(
+                    //             key: state.pageKey,
+                    //             id: state.params['id']!,
+                    //             data: data),
+                    //       );
+                    //     })
                   ]),
               GoRoute(
                   path: '/login',
