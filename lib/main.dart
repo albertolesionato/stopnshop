@@ -2,14 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stopnshop/categories/category_dto.dart';
+import 'package:stopnshop/widgets/future_builder_.dart';
 
 import 'account/login.dart';
 import 'cart/cart.dart';
 import 'categories/categories.dart';
 import 'categories/category.dart';
-import 'foundation.dart';
 import 'home/home.dart';
 import 'shell.dart';
 import 'state_observer.dart';
@@ -20,11 +20,17 @@ void main() {
   runApp(const App());
 }
 
+final key = GlobalKey<NavigatorState>();
+
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
   static final _router = GoRouter(
       // debugLogDiagnostics: true,
+    redirect: (context, state) {
+      print(state.location);
+
+    },
       initialLocation: '/home',
       routes: [
         ShellRoute(
@@ -32,7 +38,7 @@ class App extends StatelessWidget {
               return Shell(key: state.pageKey, child: child);
             },
             routes: [
-            // https://github.com/flutter/flutter/issues/99124
+              // https://github.com/flutter/flutter/issues/99124
               GoRoute(
                   name: 'home',
                   path: '/:tab(home|cart|categories)',
@@ -57,24 +63,27 @@ class App extends StatelessWidget {
                     ));
                   },
                   routes: [
-                    $category
-                    // GoRoute(
-                    //     name: 'category',
-                    //     path: 'category/:id',
-                    //     pageBuilder: (context, state) {
-                    //       StringMap? data;
-                    //       if (state.extra != null) {
-                    //         data = state.extra as StringMap;
-                    //       }
-                    //       return NoTransitionPage(
-                    //         child: Category(
-                    //             key: state.pageKey,
-                    //             id: state.params['id']!,
-                    //             data: data),
-                    //       );
-                    //     })
+                    GoRoute(
+                        name: 'category',
+                        path: 'category/:id',
+                        pageBuilder: (context, state) {
+                          if (state.extra == null) {
+                            return NoTransitionPage(
+                                child: FutureBuilder_.whole(
+                                    future: CategoryDto.getCategory(
+                                        state.params['id']!),
+                                    builder: (context, json) {
+                                      return Category(
+                                          dto: CategoryDto.fromJson(json));
+                                    }));
+                          }
+                          return NoTransitionPage(
+                            child: Category(dto: state.extra as CategoryDto),
+                          );
+                        })
                   ]),
               GoRoute(
+                  name: 'login',
                   path: '/login',
                   pageBuilder: (context, state) {
                     return NoTransitionPage(child: Login(key: state.pageKey));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stopnshop/categories/category_dto.dart';
 
 import '../foundation.dart';
 import '../widgets/future_builder_.dart';
@@ -10,17 +11,14 @@ class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder_.list<StringMap>(future: () async {
-      await Future.delayed(const Duration(milliseconds: 250));
-      return [
-        {
-          'id': 'id1',
-          'tags': ['drink', 'imported']
-        },
-        {'id': 'id2', 'tags': []}
-      ];
-    }(), builder: (context, data) {
-      return CategoryCard(data: data);
-    })).safe();
+        body: FutureBuilder_.part(
+            future: CategoryDto.getCategories(),
+            builder: (context, json) {
+              return ListView.separated(
+                  itemBuilder: (context, i) =>
+                      CategoryCard(dto: CategoryDto.fromJson(json[i])),
+                  separatorBuilder: (context, i) => const SizedBox(height: 15),
+                  itemCount: json.length);
+            })).safe();
   }
 }

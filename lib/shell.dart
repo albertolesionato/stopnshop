@@ -16,7 +16,13 @@ class Shell extends StatelessWidget {
   Widget build(BuildContext context) {
     if (Breakpoint.fromMediaQuery(context).window <= WindowSize.xsmall) {
       return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () => context.goNamed('login'),
+                icon: const Icon(Icons.login, color: Colors.blue))
+          ],
+        ),
         body: child,
         bottomNavigationBar: const _Navbar(),
       ).safe();
@@ -25,7 +31,16 @@ class Shell extends StatelessWidget {
         child: Row(
       children: [
         const _Navbar(),
-        Expanded(child: Scaffold(appBar: AppBar(), body: child))
+        Expanded(
+            child: Scaffold(
+                appBar: AppBar(
+                  actions: [
+                    IconButton(
+                        onPressed: () => context.goNamed('login'),
+                        icon: const Icon(Icons.login, color: Colors.blue))
+                  ],
+                ),
+                body: child))
       ],
     ));
   }

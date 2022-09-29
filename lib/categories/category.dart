@@ -1,41 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stopnshop/categories/category_dto.dart';
 
-import '../foundation.dart';
-part 'category.g.dart';
+class Category extends StatelessWidget {
+  const Category({super.key, required this.dto});
 
-@TypedGoRoute<Category>(
-  path: 'category/:id',
-)
-class Category extends GoRouteData {
-  const Category({required this.id});
-
-  final String id;
+  final CategoryDto dto;
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
-    // final page = GoRouter.of(context).location;
+  Widget build(BuildContext context) {
+    final page = GoRouter.of(context).location;
 
-    return NoTransitionPage(
-      child: Scaffold(
-        body: Text('Category Page id = $id and the page is ?'),
-      ),
+    return Scaffold(
+      body: Text('Category Page id = ${dto.id} and the page is $page'),
     );
   }
 }
-// //
-// class Category extends StatelessWidget {
-//   const Category({super.key, required this.id, this.data});
-//
-//   final String id;
-//   final StringMap? data;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final page = GoRouter.of(context).location;
-//
-//     return Scaffold(
-//       body: Text('Category Page id = $id and the page is $page'),
-//     );
-//   }
-// }

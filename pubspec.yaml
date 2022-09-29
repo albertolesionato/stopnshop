@@ -39,13 +39,14 @@ dependencies:
   equatable: ^2.0.5
   breakpoint: ^1.2.0
   cupertino_icons: ^1.0.2
+  json_annotation: ^4.7.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
   build_runner: ^2.2.1
-  go_router_builder: ^1.0.14
+  json_serializable: ^6.4.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
