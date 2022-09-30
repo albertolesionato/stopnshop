@@ -11,11 +11,15 @@ class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureWidget.part(future: CategoryDto.getCategories((dtoList) {
-      return ListView.separated(
-          itemBuilder: (context, i) => CategoryCard(dto: dtoList[i]),
-          separatorBuilder: (context, i) => const SizedBox(height: 15),
-          itemCount: dtoList.length);
-    }))).safe();
+      body: FutureWidget.part(
+        future: CategoryDto.getCategories(CategoryCard.new, (children) {
+          // return ListView.separated(
+          //     itemBuilder: (context, i) => children[i],
+          //     separatorBuilder: (context, i) => const SizedBox(height: 15),
+          //     itemCount: children.length);
+          return ListView(children: children);
+        }),
+      ),
+    ).safe();
   }
 }

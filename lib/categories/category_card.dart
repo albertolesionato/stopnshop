@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stopnshop/categories/category_dto.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({super.key, required this.dto});
+  const CategoryCard(this.dto, {super.key});
 
   final CategoryDto dto;
 

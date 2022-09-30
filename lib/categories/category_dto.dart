@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide WidgetBuilder;
 import 'package:json_annotation/json_annotation.dart';
 import '../foundation.dart';
 
@@ -12,8 +12,8 @@ class CategoryDto extends Equatable {
 
   factory CategoryDto.fromJson(StringMap json) => _$CategoryDtoFromJson(json);
 
-  static Future<Widget> Function(Widget Function(List<CategoryDto>) builder)
-      getCategories = (Widget Function(List<CategoryDto>) builder) async {
+  static var getCategories = (WidgetBuilder<CategoryDto> childBuilder,
+      WidgetBuilder<List<Widget>> builder) async {
     await Future.delayed(const Duration(milliseconds: 250));
     return builder([
       for (var record in [
@@ -23,13 +23,12 @@ class CategoryDto extends Equatable {
         },
         {'id': 'id2', 'tags': []}
       ])
-        CategoryDto.fromJson(record)
+        childBuilder(CategoryDto.fromJson(record))
     ]);
   };
 
-  static Future<Widget> Function(
-          String id, Widget Function(CategoryDto) builder) getCategory =
-      (String id, Widget Function(CategoryDto) builder) async {
+  static var getCategory =
+      (String id, WidgetBuilder<CategoryDto> builder) async {
     await Future.delayed(const Duration(milliseconds: 250));
     return builder(CategoryDto.fromJson(const {
       'id': 'id1',
