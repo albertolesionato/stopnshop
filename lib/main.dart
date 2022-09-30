@@ -31,6 +31,7 @@ class App extends StatelessWidget {
             builder: (context, state, child) {
               return Shell(
                   key: state.pageKey,
+                  // TODO: state.name is empty. This solution is lacking
                   selectedTab: state.location.substring(1),
                   child: child);
             },

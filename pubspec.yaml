@@ -40,6 +40,7 @@ dependencies:
   breakpoint: ^1.2.0
   cupertino_icons: ^1.0.2
   json_annotation: ^4.7.0
+  rfw: ^1.0.6
 
 dev_dependencies:
   flutter_test:

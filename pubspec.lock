@@ -387,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  rfw:
+    dependency: "direct main"
+    description:
+      name: rfw
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   shelf:
     dependency: transitive
     description:
