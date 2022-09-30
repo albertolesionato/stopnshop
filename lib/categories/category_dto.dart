@@ -12,18 +12,19 @@ class CategoryDto extends Equatable {
 
   factory CategoryDto.fromJson(StringMap json) => _$CategoryDtoFromJson(json);
 
-  static Stream<Widget> Function(Widget Function(CategoryDto) builder)
-      getCategories = (Widget Function(CategoryDto) builder) async* {
+  static Future<Widget> Function(Widget Function(List<CategoryDto>) builder)
+      getCategories = (Widget Function(List<CategoryDto>) builder) async {
     await Future.delayed(const Duration(milliseconds: 250));
-    for (var j in [
-      {
-        'id': 'id1',
-        'tags': ['drink', 'imported']
-      },
-      {'id': 'id2', 'tags': []}
-    ]) {
-      yield builder(CategoryDto.fromJson(j));
-    }
+    return builder([
+      for (var record in [
+        {
+          'id': 'id1',
+          'tags': ['drink', 'imported']
+        },
+        {'id': 'id2', 'tags': []}
+      ])
+        CategoryDto.fromJson(record)
+    ]);
   };
 
   static Future<Widget> Function(
