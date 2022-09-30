@@ -4,7 +4,7 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:stopnshop/categories/category_dto.dart';
-import 'package:stopnshop/widgets/future_builder_.dart';
+import 'package:stopnshop/widgets/future_widget.dart';
 
 import 'account/login.dart';
 import 'cart/cart.dart';
@@ -20,22 +20,19 @@ void main() {
   runApp(const App());
 }
 
-final key = GlobalKey<NavigatorState>();
-
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
   static final _router = GoRouter(
       // debugLogDiagnostics: true,
-    redirect: (context, state) {
-      print(state.location);
-
-    },
       initialLocation: '/home',
       routes: [
         ShellRoute(
             builder: (context, state, child) {
-              return Shell(key: state.pageKey, child: child);
+              return Shell(
+                  key: state.pageKey,
+                  selectedTab: state.location.substring(1),
+                  child: child);
             },
             routes: [
               // https://github.com/flutter/flutter/issues/99124
@@ -69,16 +66,12 @@ class App extends StatelessWidget {
                         pageBuilder: (context, state) {
                           if (state.extra == null) {
                             return NoTransitionPage(
-                                child: FutureBuilder_.whole(
+                                child: FutureWidget.whole(
                                     future: CategoryDto.getCategory(
-                                        state.params['id']!),
-                                    builder: (context, json) {
-                                      return Category(
-                                          dto: CategoryDto.fromJson(json));
-                                    }));
+                                        state.params['id']!, Category.new)));
                           }
                           return NoTransitionPage(
-                            child: Category(dto: state.extra as CategoryDto),
+                            child: Category(state.extra as CategoryDto),
                           );
                         })
                   ]),

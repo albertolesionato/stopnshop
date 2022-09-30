@@ -5,32 +5,34 @@ import 'package:go_router/go_router.dart';
 import 'foundation.dart';
 
 class Shell extends StatelessWidget {
-  const Shell({Key? key, required this.child}) : super(key: key);
+  const Shell({Key? key, required this.child, required this.selectedTab})
+      : super(key: key);
 
   static Shell of(BuildContext context) =>
       context.findAncestorWidgetOfExactType<Shell>()!;
 
   final Widget child;
+  final String selectedTab;
 
   @override
   Widget build(BuildContext context) {
     if (Breakpoint.fromMediaQuery(context).window <= WindowSize.xsmall) {
       return Scaffold(
         appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () => context.goNamed('login'),
-                icon: const Icon(Icons.login, color: Colors.blue))
-          ],
+          // actions: [
+          //   IconButton(
+          //       onPressed: () => context.goNamed('login'),
+          //       icon: const Icon(Icons.login, color: Colors.blue))
+          // ],
         ),
         body: child,
-        bottomNavigationBar: const _Navbar(),
+        bottomNavigationBar: _Navbar(key: ValueKey(selectedTab)),
       ).safe();
     }
     return SafeArea(
         child: Row(
       children: [
-        const _Navbar(),
+        _Navbar(key: ValueKey(selectedTab)),
         Expanded(
             child: Scaffold(
                 appBar: AppBar(
@@ -46,29 +48,24 @@ class Shell extends StatelessWidget {
   }
 }
 
-class _Navbar extends StatefulWidget {
+class _Navbar extends StatelessWidget {
   const _Navbar({Key? key}) : super(key: key);
 
   @override
-  State<_Navbar> createState() => _NavbarState();
-}
-
-class _NavbarState extends State<_Navbar> {
-  @override
   Widget build(BuildContext context) {
-    final currentLocation = GoRouter.of(context).location;
-
     tab(IconData iconData, String label) {
       final color = Theme.of(context).scaffoldBackgroundColor;
+      final selectedTab =
+          context.findAncestorWidgetOfExactType<Shell>()!.selectedTab;
       final value = label.toLowerCase();
 
       return Material(
-        color: currentLocation.substring(1) == value ? color : Colors.white,
+        color: selectedTab == value ? color : Colors.white,
         child: InkWell(
           hoverColor: color,
           onTap: () {
             context.goNamed('home', params: {'tab': value});
-            setState(() {});
+            // setState(() {});
           },
           child: Padding(
             padding: const EdgeInsets.all(12.0),
