@@ -12,30 +12,6 @@ class CategoryDto extends Equatable {
 
   factory CategoryDto.fromJson(StringMap json) => _$CategoryDtoFromJson(json);
 
-  static var getCategories = (WidgetBuilder<CategoryDto> childBuilder,
-      WidgetBuilder<List<Widget>> builder) async {
-    await Future.delayed(const Duration(milliseconds: 250));
-    return builder([
-      for (var record in [
-        {
-          'id': 'id1',
-          'tags': ['drink', 'imported']
-        },
-        {'id': 'id2', 'tags': []}
-      ])
-        childBuilder(CategoryDto.fromJson(record))
-    ]);
-  };
-
-  static var getCategory =
-      (String id, WidgetBuilder<CategoryDto> builder) async {
-    await Future.delayed(const Duration(milliseconds: 250));
-    return builder(CategoryDto.fromJson(const {
-      'id': 'id1',
-      'tags': ['drink', 'imported']
-    }));
-  };
-
   @JsonKey(name: 'id')
   final String id;
 

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stopnshop/categories/category_dto.dart';
+import 'category_dto.dart';
+import '../foundation.dart';
 
 class Category extends StatelessWidget {
   const Category(this.dto, {super.key});
+
+  Category.fromJson(StringMap json, {super.key})
+      : dto = CategoryDto.fromJson(json);
 
   final CategoryDto dto;
 

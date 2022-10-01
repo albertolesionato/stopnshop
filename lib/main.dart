@@ -23,6 +23,15 @@ void main() {
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
+  @visibleForTesting
+  static var getCategory = (String id) async {
+    await Future.delayed(const Duration(milliseconds: 250));
+    return {
+      'id': id,
+      'tags': ['drink', 'imported']
+    };
+  };
+
   static final _router = GoRouter(
       // debugLogDiagnostics: true,
       initialLocation: '/home',
@@ -67,9 +76,11 @@ class App extends StatelessWidget {
                         pageBuilder: (context, state) {
                           if (state.extra == null) {
                             return NoTransitionPage(
-                                child: FutureWidget.whole(
-                                    future: CategoryDto.getCategory(
-                                        state.params['id']!, Category.new)));
+                              child: FutureWidget.whole(future: () async {
+                                return Category.fromJson(
+                                    await getCategory('42'));
+                              }),
+                            );
                           }
                           return NoTransitionPage(
                             child: Category(state.extra as CategoryDto),
